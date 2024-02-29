@@ -3,64 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use App\Http\Requests\StoreAttendanceRequest;
-use App\Http\Requests\UpdateAttendanceRequest;
+use App\Models\Session;
+use App\Models\Apprentice;
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Instructor;
 
 class AttendanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index(){
+
+
+
+    }
+    // $user = User::find(1);
+    // $estado = $user->apprentice->estado;
+    // $etapa = $user->apprentice->etapa;
+
+    public function create(){
+
+        $apprendices = Apprentice::all();
+        $instructors = Instructor::all();
+        $sessions = Session::all();
+
+        return view('attendances.create', ['sessions'=>$sessions, 'apprendices'=>$apprendices, 'instructor'=>$instructors]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    public function store(Request $request) {
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAttendanceRequest $request)
-    {
-        //
-    }
+        // $aprendicesNoAsistieron = $request->input('aprendices_no_asistieron');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAttendanceRequest $request, Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Attendance $attendance)
-    {
-        //
+        // foreach ($aprendicesNoAsistieron as $aprendizId)
+        // {
+            $attendance = new Attendance();
+            $attendance->aprendiz_id = $request->aprendiz_id;
+            $attendance->session_id = $request->session_id;
+            $attendance->asistio = false;
+            $attendance->slug = $request->slug;
+            $attendance->session_id=$request->session_id;
+            $attendance->instructor_id=$request->instructor_id;
+            $attendance->save();
+        // }
     }
 }

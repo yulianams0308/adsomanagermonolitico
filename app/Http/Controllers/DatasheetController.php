@@ -3,64 +3,92 @@
 namespace App\Http\Controllers;
 
 use App\Models\Datasheet;
-use App\Http\Requests\StoreDatasheetRequest;
-use App\Http\Requests\UpdateDatasheetRequest;
+use Illuminate\Http\Request;
+use App\Models\Competence;
 
 class DatasheetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $datasheets = Datasheet::all();
+
+        return view('datasheets.index',['datasheets'=>$datasheets]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $competences = Competence::all();
+        return view('datasheets.create', ['competences' => $competences]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreDatasheetRequest $request)
-    {
-        //
+    public function store(Request $request){
+
+        $datasheet = new Datasheet();
+        $datasheet->numero_ficha=$request->numero_ficha;
+        $datasheet->programa=$request->programa;
+        $datasheet ->slug=$request->numero_ficha;
+        $datasheet->save();
+
+        $datasheet->competences()->sync($request->input('competences', []));
+        return redirect()->route('datasheets.show', $datasheet);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Datasheet $datasheet)
-    {
-        //
+    public function show(Datasheet $datasheet){
+
+        $competences = $datasheet->competences;           
+        return view('datasheets.show',compact('datasheet','competences'));
+    }
+ 
+    public function destroy (Datasheet $datasheet){
+        
+        $datasheet->delete();
+        return redirect()->route('datasheets.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Datasheet $datasheet)
-    {
-        //
+    public function edit(Datasheet $datasheet){
+        $competences = $datasheet->competences;
+        // $competences = Competence::all();
+        $competences = Competence::orderBy('id', 'asc')->get();
+
+        $selectedCompetences = $datasheet->competences->pluck('id')->toArray();
+        return view('datasheets.edit',compact('datasheet','competences', 'selectedCompetences'));
+    }
+        
+    
+
+    // public function update(Request $request, Datasheet $datasheet){
+    //     $datasheet->numero_ficha=$request->numero_ficha;
+    //     $datasheet->programa=$request->programa;
+    //     $datasheet ->slug=$request->numero_ficha;
+        
+    //     $datasheet->save();
+    //     $competences = $datasheet->competences;
+    //     return view('datasheets.show',compact('datasheet','competences'));
+    // }
+
+    public function update(Request $request, Datasheet $datasheet){
+    $datasheet->numero_ficha = $request->numero_ficha;
+    $datasheet->programa = $request->programa;
+    $datasheet->slug = $request->numero_ficha;
+    $datasheet->save();
+
+    // Synchronize the selected competences
+    $datasheet->competences()->sync($request->input('competences', []));
+
+    return redirect()->route('datasheets.show', $datasheet);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDatasheetRequest $request, Datasheet $datasheet)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Datasheet $datasheet)
-    {
-        //
-    }
+    
+    
+    
+
+        
+        
+
+     
 }
+
+
+
+

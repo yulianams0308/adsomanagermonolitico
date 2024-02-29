@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use App\Models\Datasheet;
 class DatasheetSeeder extends Seeder
 {
     /**
@@ -12,6 +12,6 @@ class DatasheetSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        // Datasheet::factory(10)->create();
     }
 }

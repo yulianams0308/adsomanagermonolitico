@@ -3,64 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Apprentice;
-use App\Http\Requests\StoreApprenticeRequest;
-use App\Http\Requests\UpdateApprenticeRequest;
+use App\Models\Datasheet;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class ApprenticeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+
+    public function create() {
+        $datasheets = Datasheet::all();
+
+        $users = User::whereHas('role', function ($query) {
+            $query->where('nombre_rol', 'Aprendiz');
+        })->get();
+
+        return view('apprentices.create', ['datasheet' => $datasheets, 'users' => $users]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreApprenticeRequest $request)
-    {
-        //
+    public function store(Request $request){
+
+        $apprentice=new Apprentice();
+        $apprentice->estado=$request->estado;
+        $apprentice->etapa=$request->etapa;
+        $apprentice->ficha_id=$request->ficha_id;
+        $apprentice->user_id=$request->user_id;
+        $apprentice->slug=$request->slug;
+        $apprentice->save();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Apprentice $apprentice)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Apprentice $apprentice)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateApprenticeRequest $request, Apprentice $apprentice)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Apprentice $apprentice)
-    {
-        //
-    }
+    
 }

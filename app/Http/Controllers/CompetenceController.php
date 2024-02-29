@@ -3,64 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Competence;
-use App\Http\Requests\StoreCompetenceRequest;
-use App\Http\Requests\UpdateCompetenceRequest;
+use Illuminate\Http\Request;
+use App\Models\Instructor;
 
 class CompetenceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $instructors  = Instructor::all();
+        return view('competences.create', ['instructor' => $instructors]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreCompetenceRequest $request)
+    public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Competence $competence)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Competence $competence)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCompetenceRequest $request, Competence $competence)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Competence $competence)
-    {
-        //
+        $competences =new Competence();
+        $competences ->nombre_competencia=$request->nombre_competencia;
+        $competences ->descripcion=$request->descripcion;
+        $competences ->anexo=$request->anexo;
+        $competences ->instructor_id=$request->instructor_id;
+        $competences ->slug=$request->slug;
+        $competences ->save();
     }
 }

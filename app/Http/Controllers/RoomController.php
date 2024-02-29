@@ -3,64 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
-use App\Http\Requests\StoreRoomRequest;
-use App\Http\Requests\UpdateRoomRequest;
+use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index(){
+ 
+        $rooms =  Room::orderBy('id', 'desc')->get();
+       
+        return view('rooms.listar', compact('rooms'));
+
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create(){
+        return view('rooms.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreRoomRequest $request)
-    {
-        //
-    }
+    public function store(Request $request){
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Room $room)
-    {
-        //
-    }
+        $room=new Room();
+        $room->num_salon=$request->num_salon;
+        $room->sede=$request->sede;
+        $room->capacidad=$request->capacidad;
+        $room->observacion=$request->observacion;
+        $room->slug=$request->slug;
+        $room->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Room $room)
-    {
-        //
-    }
+     //   return redirect()->route('rooms.create');
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateRoomRequest $request, Room $room)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Room $room)
-    {
-        //
-    }
+      }
+
 }

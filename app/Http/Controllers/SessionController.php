@@ -2,65 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Datasheet;
+use App\Models\Room;
 use App\Models\Session;
-use App\Http\Requests\StoreSessionRequest;
-use App\Http\Requests\UpdateSessionRequest;
+use App\Models\Instructor;
+use Illuminate\Http\Request;
 
 class SessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create(){
+        $datasheets = Datasheet::all();
+        $rooms = Room::all();
+        $instructors = Instructor::all();
+        return view('sessions.create', ['datasheet'=>$datasheets,'room'=>$rooms,'instructor'=>$instructors ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreSessionRequest $request)
-    {
-        //
-    }
+    public function store(Request $request){
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Session $session)
-    {
-        //
-    }
+        $session=new Session();
+        $session->observacion=$request->observacion;
+        $session->fecha_inicio=$request->fecha_inicio;
+        $session->fecha_fin=$request->fecha_fin;
+        $session->ficha_id=$request->ficha_id;
+        $session->ambiente_id=$request->ambiente_id;
+        $session->instructor_id=$request->instructor_id;
+        $session->slug=$request->slug;
+        $session->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Session $session)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateSessionRequest $request, Session $session)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Session $session)
-    {
-        //
     }
 }
